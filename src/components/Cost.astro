@@ -1,0 +1,61 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { contacts } from "../data/site";
+const faq = [
+  { q: "Від чого залежить ціна", a: "Від садочка й міста та від формату: повний день 8:00–19:00 або пів дня 8:00–13:00. Тому точну суму називає саме ваш садочок." },
+  { q: "Чи є вступний внесок", a: "Так, під час зарахування сплачується вступний внесок. Його розмір залежить від садочка, уточнюйте за телефоном." },
+  { q: "Програма «єЯсла»", a: "mKids бере участь у державній програмі «єЯсла». Чи діє вона у вашому садочку, підкажуть за телефоном." },
+  { q: "«Гроші ходять за дитиною»", a: "Садочок на Осокорках бере участь у міській програмі Києва «Гроші ходять за дитиною»." },
+  { q: "−50 % за рекомендацію друга", a: "Якщо за вашою рекомендацією до mKids прийде друг, наступний місяць для вас коштуватиме на 50 % менше." },
+];
+---
+<section id="cost" class="section on-well cost" data-rec="R-111,G-R003,M-R002" aria-labelledby="cost-title">
+  <div class="container cost__grid">
+    <div class="cost__head">
+      <h2 id="cost-title" class="h2">Вартість і пільги</h2>
+      <p class="lead">Точну вартість назве ваш садочок.</p>
+      <a class="tel cost__phone" href={`tel:${contacts.phone.tel}`}><Icon name="phone" size={22} /><span>{contacts.phone.text}</span></a>
+      <FutureLink note="Розділ у розробці">Усі ціни по садочках</FutureLink>
+    </div>
+    <div class="cost__faq">
+      {faq.map((f) => (
+        <details class="qa">
+          <summary><span>{f.q}</span><svg class="qa__chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cost__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .cost__head { grid-column: 1 / span 4; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .cost__phone { font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); letter-spacing: -0.02em; }
+  .cost__faq { grid-column: 6 / span 7; border-top: 1px solid var(--color-rule); }
+  .qa { border-bottom: 1px solid var(--color-rule); }
+  .qa summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+    min-height: 72px; padding-block: var(--space-3); cursor: pointer; list-style: none;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.01em;
+    border-radius: var(--radius); transition: color var(--dur-short) var(--ease-out);
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary:hover { color: var(--color-accent-text); }
+  .qa__chev { flex: none; transition: transform var(--dur-short) var(--ease-in-out); }
+  .qa[open] .qa__chev { transform: rotate(180deg); }
+  .qa p { margin: 0; padding: 0 var(--space-7) var(--space-5) 0; color: var(--color-muted); max-width: 60ch; }
+  .qa[open] p { animation: qa-in var(--dur-short) var(--ease-out); }
+  @keyframes qa-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 60rem) {
+    .cost__grid { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-6); }
+    .cost__head, .cost__faq { grid-column: 1; }
+    .qa p { padding-right: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .qa__chev, .qa summary { transition: none; }
+    .qa[open] p { animation: none; }
+  }
+</style>

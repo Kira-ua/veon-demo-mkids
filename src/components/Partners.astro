@@ -1,0 +1,50 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { contacts } from "../data/site";
+const items = [
+  { title: "Франшиза і консалтинг", line: "Запуск освітнього проєкту: від консультації до супроводу й управління локацією." },
+  { title: "Забудовникам", line: "Приміщення 1 000–2 000 м² або вбудовані в ЖК, у містах від 150 тисяч мешканців." },
+  { title: "Корпоративним клієнтам", line: "Освітній кластер в офісному центрі та пільгові умови для дітей співробітників." },
+  { title: "Проєкти в управлінні", line: "Private Label: «Благозаврик» в Івано-Франківську, садочки в Любліні та Прушкові." },
+];
+---
+<section id="partners" class="section partners" aria-labelledby="partners-title">
+  <div class="container partners__grid">
+    <div class="partners__head">
+      <h2 id="partners-title" class="h2">Партнерам</h2>
+      <p class="muted">Запускаємо й ведемо освітні проєкти разом із забудовниками, компаніями та франчайзі.</p>
+      <div class="partners__contact">
+        <a class="tel" href={`tel:${contacts.phone.tel}`}><Icon name="phone" size={18} /><span>{contacts.phone.text}</span></a>
+        <a class="tel" href={contacts.telegram} rel="noopener"><Icon name="telegram" size={18} /><span>Telegram</span></a>
+      </div>
+    </div>
+    <ul class="partners__list" role="list">
+      {items.map((i) => (
+        <li class="prow">
+          <h3 class="prow__title"><FutureLink note="Розділ у розробці">{i.title}</FutureLink></h3>
+          <p class="prow__line">{i.line}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .partners { border-top: 1px solid var(--color-rule); padding-bottom: var(--space-7); }
+  .partners__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .partners__head { grid-column: 1 / span 4; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .partners__head .h2 { font-size: var(--text-title); letter-spacing: -0.02em; }
+  .partners__head p { margin: 0; max-width: 34ch; }
+  .partners__contact { display: flex; flex-wrap: wrap; column-gap: var(--space-5); }
+  .partners__list { grid-column: 6 / span 7; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-rule); }
+  .prow { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--gap); align-items: baseline; padding-block: var(--space-4); border-bottom: 1px solid var(--color-rule); }
+  .prow__title { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; }
+  .prow__line { margin: 0; font-size: var(--text-sm); color: var(--color-muted); }
+
+  @media (max-width: 60rem) {
+    .partners__grid { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-6); }
+    .partners__head, .partners__list { grid-column: 1; }
+    .prow { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
+  }
+</style>

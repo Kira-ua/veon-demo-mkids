@@ -1,0 +1,144 @@
+/* Hallmark · shape: route-line through ten sections · genre: modern-minimal · theme: custom · job: book · idea: "Лінія mKids: one orange route through the network's real cities, then a child's ages, then a family's first steps" · vibe: "fresh leaf paper, orange route, calm facts"
+ * paper: #F3F5EE · accent: #FF7F0A · display: Geologica · body: IBM Plex Sans · hero: H1 across ten columns, a clickable route of six city stops, lede and two actions left of one wide client photo · nav: one bar, logo, five anchors, phone as text, book button · footer: light, contacts left, anchors and future pages centre, socials right · imagery: client photos · signature: the orange route line whose city stops open that city's addresses
+ * axes: light/grotesk-sans/warm · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: imagery, client photos are web-size (max 1920px); one wide frame per photo section, no wall of photos */
+/* Hallmark · answer 28a · the hero photo (Hero.astro) is the LCP and carries fetchpriority="high" without lazy; loading="lazy" is only on the Day and School photos far below the first screen */
+/* Hallmark · waive 59 · 10 content sections plus footer · the approved concept (design/concept.md §8, veon-concept sections) fixes these ten blocks, each carrying a client fact; studio rule: sections follow the client's facts */
+/* Hallmark · answer 42 · the footer is decided and named in the stamp: light paper, orange line on top, contacts left, anchors and future pages centre, socials right (concept.md §5 Футер) */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md); waivers go right below it. */
+
+/* Self-hosted fonts (OFL): Latin + Cyrillic subsets, swap, metric fallbacks. */
+@font-face {
+  font-family: "Geologica";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../assets/fonts/geologica-800-crsv-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Geologica";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../assets/fonts/geologica-800-crsv-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../assets/fonts/ibm-plex-sans-var-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../assets/fonts/ibm-plex-sans-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Geologica Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Arial");
+  font-weight: 800;
+  size-adjust: 110%;
+  ascent-override: 88.6%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Plex Fallback";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 106%;
+  ascent-override: 96.7%;
+  descent-override: 25.9%;
+  line-gap-override: 0%;
+}
+
+/* Client design tokens, from design/concept.md (veon-concept: colors, fonts). */
+:root {
+  /* colour roles */
+  --color-bg: #F3F5EE;            /* paper: leaf-tinted */
+  --color-paper-2: #E6EBDF;       /* well (cost) */
+  --color-text: #16261D;          /* ink */
+  --color-muted: #5A665E;         /* secondary text */
+  --color-accent: #FF7F0A;        /* logo orange: fills, the line, primary button */
+  --color-accent-hover: #EE7000;  /* primary hover step (ink on it 5.7:1) */
+  --color-accent-text: #A84800;   /* orange text on light paper */
+  --color-accent-ink: #16261D;    /* text on the orange fill (6.2:1) */
+  --color-on-accent: var(--color-accent-ink);
+  --color-field: #1F4A37;         /* deep leaf field: branches, school */
+  --color-field-2: #275A43;       /* hover step on the field */
+  --color-on-field: #F3F5EE;
+  --color-on-field-muted: #C7D3CB;
+  --color-rule: #C9D1C4;          /* hairlines on paper */
+  --color-rule-field: #3E6A55;    /* hairlines on the field */
+  --color-border-strong: #5A665E;
+  --color-focus: #16261D;
+  --color-focus-field: #FF7F0A;
+  --color-tooltip: #16261D;
+  --color-on-tooltip: #F3F5EE;
+
+  /* type */
+  --font-display: "Geologica", "Geologica Fallback", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Plex Fallback", system-ui, sans-serif;
+  --text-display: clamp(2.6rem, 1.2rem + 5.2vw, 5.25rem);   /* H1, 84px at 1440 */
+  --text-number: clamp(1.75rem, 0.9rem + 4.4vw, 4rem);        /* phone in contacts, 64px */
+  --text-year: clamp(5rem, 2rem + 11vw, 11rem);             /* «2002», the one graphic number */
+  --text-section: clamp(2rem, 1.35rem + 2.1vw, 3rem);       /* H2, 48px */
+  --text-title: clamp(1.375rem, 1.1rem + 0.9vw, 1.875rem);  /* H3, stations, districts, 30px */
+  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);  /* 20px */
+  --text-body: 1.0625rem;                                   /* 17px */
+  --text-sm: 0.875rem;                                      /* 14px */
+  --lh-display: 1.02;
+  --lh-section: 1.08;
+  --lh-title: 1.15;
+  --lh-body: 1.6;
+  --track-display: -0.03em;
+
+  /* space, 4/8 scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 40px;
+  --space-7: 64px;
+  --space-8: 96px;
+  --space-9: 144px;
+  --space: clamp(20px, 5vw, 120px);          /* page gutter */
+  --gap: 24px;                               /* grid gutter */
+  --section-y: clamp(64px, 3rem + 5vw, 144px);
+  --section-y-band: clamp(56px, 2.5rem + 3vw, 96px);
+
+  /* shape */
+  --container: 1440px;
+  --radius: 8px;            /* tabs, tooltip */
+  --radius-photo: min(1vw, 12px);
+  --radius-well: 12px;
+  --radius-pill: 999px;
+  --line: 4px;              /* the mKids line */
+  --stop: 18px;             /* a stop on the line */
+  --control-h: 48px;
+  --header-h: 72px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-in: cubic-bezier(.5, 0, .75, 0);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+  --dur-line: 700ms;
+  --dur-fill: 800ms;
+  --dur: 600ms;
+  --z-header: 50;
+  --z-bar: 40;
+  --z-pop: 60;
+}
+@media (max-width: 60rem) {
+  :root { --header-h: 64px; }
+}

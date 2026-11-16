@@ -1,0 +1,66 @@
+---
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+const steps = [
+  { title: "Напишіть або зателефонуйте", line: "Розкажіть, скільки дитині років і де ви живете. Підкажемо найближчий садочок." },
+  { title: "Екскурсія садочком", line: "Приходьте разом із дитиною: подивіться групи й познайомтеся з вихователем." },
+  { title: "Безкоштовні дні адаптації", line: "Дитина звикає поступово, поруч вихователь і психолог." },
+  { title: "Рішення", line: "Ви вирішуєте, коли вже побачили садочок і те, як дитина почувається в групі." },
+];
+---
+<section id="first-steps" class="section first" aria-labelledby="first-title" data-rec="R-102">
+  <div class="container first__grid">
+    <div class="first__head">
+      <h2 id="first-title" class="h2">Перші кроки</h2>
+      <p class="lead muted">Чотири зупинки від першого дзвінка до першого дня в групі.</p>
+    </div>
+    <div class="first__body">
+      <ol class="steps" role="list">
+        {steps.map((s, i) => (
+          <li class="step">
+            <span class="step__num" aria-hidden="true">{i + 1}</span>
+            <div>
+              <h3 class="step__title">{s.title}</h3>
+              <p class="step__line">{s.line}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="first__end">
+        <p class="first__ask">Запишіться на екскурсію зараз:</p>
+        <ul class="channels" role="list">
+          <li><a class="channel" href={contacts.telegram} rel="noopener"><Icon name="telegram" /><span>Telegram</span></a></li>
+          <li><a class="channel" href={contacts.viber}><Icon name="viber" /><span>Viber</span></a></li>
+          <li><a class="channel" href={`tel:${contacts.phone.tel}`}><Icon name="phone" /><span>Подзвонити</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .first__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .first__head { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: var(--space-4); align-self: start; position: sticky; top: calc(var(--header-h) + var(--space-6)); }
+  .first__body { grid-column: 6 / span 7; }
+  .steps { position: relative; margin: 0; padding: 0; list-style: none; }
+  .steps::before {
+    content: ""; position: absolute; left: calc(24px - var(--line) / 2); top: 24px; bottom: 0; width: var(--line);
+    border-radius: var(--line); background: var(--color-accent);
+  }
+  .step { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: var(--space-5); padding-bottom: var(--space-6); }
+  .step__num {
+    display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+    background: var(--color-bg); border: var(--line) solid var(--color-accent);
+    font-family: var(--font-display); font-weight: 800; font-size: 1.25rem;
+  }
+  .step__title { margin: var(--space-2) 0 var(--space-2); font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); line-height: var(--lh-title); letter-spacing: -0.02em; }
+  .step__line { margin: 0; color: var(--color-muted); max-width: 46ch; }
+  .first__end { position: relative; margin-left: calc(24px - var(--stop) / 2); padding-left: calc(var(--stop) / 2 + var(--space-5) + 24px - var(--stop) / 2); }
+  .first__end::before { content: ""; position: absolute; left: 0; top: 4px; width: var(--stop); height: var(--stop); border-radius: 50%; background: var(--color-accent); }
+  .first__ask { margin: 0 0 var(--space-4); font-weight: 600; }
+
+  @media (max-width: 60rem) {
+    .first__grid { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-6); }
+    .first__head, .first__body { grid-column: 1; position: static; }
+  }
+</style>

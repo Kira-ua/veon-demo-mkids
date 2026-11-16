@@ -1,0 +1,84 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { contacts, asset } from "../data/site";
+const schools = [
+  { name: "m.Primary Осокорки", where: "Київ, Осокорки", address: undefined, phone: contacts.schoolPhone, general: false },
+  { name: "m.Primary Караваєві Дачі", where: "Київ", address: "вул. Кар'єрна, 19б", phone: contacts.schoolPhone, general: false },
+  { name: "m.Afterschool Березняки", where: "Київ", address: "вул. Березняківська, 34", phone: contacts.phone, general: true },
+];
+---
+<section id="school" class="section on-field school" data-rec="R-105" aria-labelledby="school-title">
+  <div class="container school__grid">
+    <div class="school__head">
+      <img class="school__logo" src={asset("img/m-primary.svg")} width="88" height="88" alt="" loading="lazy" />
+      <h2 id="school-title" class="h2">Школа m.Primary</h2>
+      <p class="lead school__lead">Наступна зупинка після садочка: початкова школа для дітей від 6 років.</p>
+    </div>
+
+    <dl class="school__facts">
+      <div><dt>Класи</dt><dd>1–4</dd></div>
+      <div><dt>Учнів у класі</dt><dd>до 20</dd></div>
+      <div><dt>вступного внеску для випускників садочків mKids</dt><dd>−50 %</dd></div>
+    </dl>
+
+    <figure class="school__photo">
+      <img src={asset("img/school-class-960.webp")} srcset={`${asset("img/school-class-640.webp")} 640w` + ", " + `${asset("img/school-class-960.webp")} 960w` + ", " + `${asset("img/school-class-1440.webp")} 1440w`}
+        sizes="(min-width: 60rem) 50vw, 100vw" width="1440" height="960" loading="lazy" decoding="async"
+        alt="Учні початкової школи m.Primary разом із вчительками в класі піднімають руки" />
+    </figure>
+
+    <ul class="school__list" role="list">
+      {schools.map((s) => (
+        <li class="srow">
+          <h3 class="srow__name">{s.name}</h3>
+          <p class="srow__addr">{s.address ? `${s.where}, ${s.address}` : s.where}{!s.address && <span class="srow__muted srow__block">Точну адресу підкажуть за телефоном</span>}</p>
+          <a class="tel srow__tel" href={`tel:${s.phone.tel}`}><Icon name="phone" size={18} /><span>{s.phone.text}</span>{s.general && <span class="srow__muted">загальна лінія</span>}</a>
+          <FutureLink note="Розділ у розробці" class="srow__more">Сторінка школи</FutureLink>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .school__grid {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-6);
+    grid-template-areas:
+      "h h h h h . p p p p p p"
+      "f f f f f . p p p p p p"
+      "l l l l l l l l l l l l";
+  }
+  .school__head { grid-area: h; display: flex; flex-direction: column; gap: var(--space-4); }
+  .school__logo { width: 72px; height: 72px; }
+  .school__lead { color: var(--color-on-field-muted); }
+  .school__facts { grid-area: f; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-self: end; border-top: 1px solid var(--color-rule-field); padding-top: var(--space-5); }
+  .school__facts div { display: flex; flex-direction: column; gap: var(--space-2); }
+  .school__facts dt { order: 2; }
+  .school__facts dt { font-size: var(--text-sm); color: var(--color-on-field-muted); }
+  .school__facts dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); line-height: 1.1; letter-spacing: -0.02em; white-space: nowrap; }
+  .school__photo { grid-area: p; margin: 0; min-width: 0; }
+  .school__photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-photo); }
+  .school__list { grid-area: l; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-rule-field); }
+  .srow { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; min-height: 88px; padding-block: var(--space-3); border-bottom: 1px solid var(--color-rule-field); }
+  .srow__name { grid-column: 1 / span 4; margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); line-height: var(--lh-title); letter-spacing: -0.02em; }
+  .srow__addr { grid-column: 5 / span 4; margin: 0; }
+  .srow__muted { color: var(--color-on-field-muted); font-weight: 400; font-size: var(--text-sm); }
+  .srow__block { display: block; }
+  .srow__tel { grid-column: 9 / span 2; flex-wrap: wrap; column-gap: var(--space-2); }
+  .srow :global(.srow__more) { grid-column: 11 / span 2; justify-self: end; font-size: var(--text-sm); }
+
+  @media (max-width: 75rem) {
+    .srow__addr { grid-column: 5 / span 5; }
+    .srow__block { display: block; }
+  .srow__tel { grid-column: 10 / span 3; }
+    .srow :global(.srow__more) { grid-column: 5 / span 8; justify-self: start; }
+  }
+  @media (max-width: 60rem) {
+    .school__grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "h" "p" "f" "l"; }
+    .school__facts { grid-template-columns: minmax(0, 1fr); }
+    .school__facts div { flex-direction: row; align-items: baseline; gap: var(--space-4); }
+    .srow { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); padding-block: var(--space-5); }
+    .srow__name, .srow__addr, .srow__tel, .srow :global(.srow__more) { grid-column: 1; justify-self: start; }
+  }
+</style>

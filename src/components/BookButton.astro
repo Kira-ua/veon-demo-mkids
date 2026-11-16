@@ -1,0 +1,46 @@
+---
+// «Записатися на екскурсію»: a disclosure (<details>) with the three real channels. Works without JS.
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+interface Props { label?: string; variant?: "primary" | "quiet"; align?: "start" | "end"; class?: string; rec?: string; }
+const { label = "Записатися на екскурсію", variant = "primary", align = "start", class: cls, rec } = Astro.props;
+---
+<details class:list={["book", `book--${variant}`, `book--${align}`, cls]} data-book data-rec={rec}>
+  <summary class:list={["btn", variant === "primary" ? "btn--primary" : "btn--quiet"]}>
+    <span>{label}</span>
+    <Icon name="chevron" size={18} class="book__chev" />
+  </summary>
+  <div class="book__menu">
+    <p class="book__hint">Оберіть, як зручніше:</p>
+    <ul class="book__list" role="list">
+      <li><a class="channel" href={contacts.telegram} rel="noopener"><Icon name="telegram" /><span>Telegram</span></a></li>
+      <li><a class="channel" href={contacts.viber}><Icon name="viber" /><span>Viber</span></a></li>
+      <li><a class="channel" href={`tel:${contacts.phone.tel}`}><Icon name="phone" /><span>Подзвонити</span></a></li>
+    </ul>
+  </div>
+</details>
+
+<style>
+  .book { position: relative; display: inline-block; }
+  .book > summary { list-style: none; }
+  .book > summary::-webkit-details-marker { display: none; }
+  .book__chev { transition: transform var(--dur-short) var(--ease-in-out); }
+  .book[open] .book__chev { transform: rotate(180deg); }
+  .book__menu {
+    position: absolute; top: calc(100% + var(--space-2)); left: 0; z-index: var(--z-pop);
+    min-width: 16rem; padding: var(--space-4); border-radius: var(--radius-well);
+    background: var(--color-bg); color: var(--color-text);
+    border: 1px solid var(--color-rule);
+    box-shadow: 0 12px 32px -12px color-mix(in oklab, var(--color-text) 30%, transparent);
+  }
+  .book--end .book__menu { left: auto; right: 0; }
+  .book[open] .book__menu { animation: book-in var(--dur-short) var(--ease-out); }
+  .book__hint { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--color-muted); }
+  .book__list { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .book__list .channel { width: 100%; }
+  @keyframes book-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .book[open] .book__menu { animation: none; }
+    .book__chev { transition: none; }
+  }
+</style>

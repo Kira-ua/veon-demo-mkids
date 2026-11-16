@@ -1,0 +1,158 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { cities, contacts, mapUrl } from "../data/site";
+---
+<section id="branches" class="section on-field branches" data-rec="R-103,R-205,G-R002" aria-labelledby="branches-title">
+  <div class="container">
+    <div class="branches__head">
+      <h2 id="branches-title" class="h2">Знайдіть свій садочок</h2>
+      <p class="lead branches__lead">Оберіть місто: адреса й телефон садочка одразу тут, без переходів.</p>
+    </div>
+
+    <div class="tabs" data-tabs>
+      <div class="tabs__bar">
+        <ul class="tabs__list" data-tablist role="list">
+          {cities.map((c) => (
+            <li><a class="tabs__tab" href={`#city-${c.id}`} data-tab={c.id}>{c.name}</a></li>
+          ))}
+        </ul>
+        <span class="tabs__indicator" data-indicator aria-hidden="true"></span>
+      </div>
+
+      {cities.map((c) => (
+        <div class="panel" id={`city-${c.id}`} data-panel={c.id}>
+          <div class="panel__head">
+            <h3 class="h3">{c.name}</h3>
+            <p class="panel__intro">{c.intro}</p>
+            {c.cityPhone && (
+              <p class="panel__cityphone">Телефон для всіх садочків міста:
+                <a class="tel" href={`tel:${c.cityPhone.tel}`}><Icon name="phone" size={18} />{c.cityPhone.text}</a>
+              </p>
+            )}
+            <FutureLink note="Розділ у розробці" class="panel__city">Сторінка міста {c.name}</FutureLink>
+          </div>
+          <ul class="rows" role="list">
+            {c.places.map((pl) => (
+              <li class="row">
+                <div class="row__name">
+                  <h4 class="row__title">{pl.name}</h4>
+                  {pl.note && <p class="row__note">{pl.note}</p>}
+                </div>
+                <div class="row__addr">
+                  {pl.address
+                    ? <p>{pl.address}</p>
+                    : <p class="row__muted">Точну адресу підкажуть за телефоном садочка</p>}
+                  {pl.map && <a class="row__map" href={mapUrl(pl.map)} rel="noopener"><Icon name="map" size={18} /><span>на карті</span></a>}
+                </div>
+                <div class="row__tel">
+                  {pl.phones.length
+                    ? pl.phones.map((ph) => (
+                        <a class="tel" href={`tel:${ph.tel}`}><Icon name="phone" size={18} /><span>{ph.text}</span>{ph.label && <span class="row__muted">{ph.label}</span>}</a>
+                      ))
+                    : c.cityPhone
+                      ? <a class="tel" href={`tel:${c.cityPhone.tel}`}><Icon name="phone" size={18} /><span>{c.cityPhone.text}</span></a>
+                      : <a class="tel" href={`tel:${contacts.phone.tel}`}><Icon name="phone" size={18} /><span>{contacts.phone.text}</span><span class="row__muted">загальна лінія</span></a>}
+                </div>
+                <div class="row__more">
+                  <FutureLink note="Розділ у розробці">Детальніше про садочок</FutureLink>
+                </div>
+              </li>
+            ))}
+            {c.id === "kyiv" && (
+              <li class="row row--school">
+                <div class="row__name"><h4 class="row__title">Школи</h4></div>
+                <div class="row__addr"><p>m.Primary на Осокорках і в Караваєвих Дачах, m.Afterschool на Березняках</p></div>
+                <div class="row__tel"><a class="tel" href="#school"><span>Дивитися школи</span></a></div>
+                <div class="row__more"></div>
+              </li>
+            )}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .branches__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: end; margin-bottom: var(--space-6); }
+  .branches__head .h2 { grid-column: 1 / span 6; }
+  .branches__lead { grid-column: 8 / span 5; color: var(--color-on-field-muted); }
+
+  /* The line enters the block and becomes the row of city tabs. */
+  .tabs__bar { position: relative; overflow-x: auto; scrollbar-width: none; }
+  .tabs__bar::-webkit-scrollbar { display: none; }
+  .tabs__list { display: flex; gap: var(--space-1); width: max-content; min-width: 100%; margin: 0; padding: 0 0 var(--space-1); list-style: none; border-bottom: var(--line) solid var(--color-accent); }
+  .tabs__tab {
+    display: inline-flex; align-items: center; min-height: 52px; padding: 0 var(--space-4);
+    border-radius: var(--radius) var(--radius) 0 0; white-space: nowrap; text-decoration: none;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.125rem; letter-spacing: -0.01em;
+    color: var(--color-on-field-muted);
+    transition: color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+  }
+  .tabs__tab:hover { color: var(--color-on-field); background: var(--color-field-2); }
+  .tabs__tab[aria-selected="true"] { color: var(--color-on-field); }
+  .tabs__tab:focus-visible { outline-offset: -2px; }
+  .tabs__indicator {
+    position: absolute; left: 0; bottom: 0; width: 100px; height: 8px;
+    border-radius: 4px; background: var(--color-accent); transform-origin: left center; opacity: 0;
+    transition: transform var(--dur-short) var(--ease-out);
+  }
+  .tabs.is-tabs .tabs__indicator { opacity: 1; }
+
+  .panel { padding-top: var(--space-6); }
+  .panel + .panel { margin-top: var(--space-6); }
+  .tabs.is-tabs .panel + .panel { margin-top: 0; }
+  .panel.is-in { animation: panel-in var(--dur-short) var(--ease-out); }
+  @keyframes panel-in { from { opacity: 0; } to { opacity: 1; } }
+  .panel__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-2); align-items: baseline; margin-bottom: var(--space-5); }
+  .panel__head .h3 { grid-column: 1 / span 4; }
+  .panel__intro { grid-column: 5 / span 5; margin: 0; color: var(--color-on-field-muted); }
+  .panel__cityphone { grid-column: 5 / span 6; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .panel__head :global(.panel__city) { grid-column: 10 / span 3; justify-self: end; font-size: var(--text-sm); }
+  .tabs.is-tabs .panel__head .h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .tabs.is-tabs .panel__intro, .tabs.is-tabs .panel__cityphone { grid-column: 1 / span 8; }
+
+  .rows { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-rule-field); }
+  .row {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center;
+    padding-block: var(--space-4); border-bottom: 1px solid var(--color-rule-field); min-height: 88px;
+  }
+  .row__name { grid-column: 1 / span 4; min-width: 0; }
+  .row__title { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); line-height: var(--lh-title); letter-spacing: -0.02em; }
+  .row__note { margin: var(--space-1) 0 0; font-size: var(--text-sm); color: var(--color-on-field-muted); }
+  .row__addr { grid-column: 5 / span 4; display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-4); min-width: 0; }
+  .row__addr p { margin: 0; }
+  .row__muted { color: var(--color-on-field-muted); font-weight: 400; font-size: var(--text-sm); }
+  .row__map {
+    display: inline-flex; align-items: center; gap: var(--space-1); min-height: 44px; font-size: var(--text-sm);
+    color: var(--color-on-field-muted); text-decoration: underline 1px; text-underline-offset: 4px;
+    transition: color var(--dur-short) var(--ease-out);
+  }
+  .row__map:hover { color: var(--color-on-field); }
+  .row__tel { grid-column: 9 / span 2; display: flex; flex-direction: column; align-items: flex-start; }
+  .row__tel .tel { flex-wrap: wrap; column-gap: var(--space-2); }
+  .row__more { grid-column: 11 / span 2; justify-self: end; font-size: var(--text-sm); }
+  .row--school .row__title { color: var(--color-on-field-muted); }
+
+  @media (max-width: 75rem) {
+    .row__addr { grid-column: 5 / span 5; }
+    .row__tel { grid-column: 10 / span 3; }
+    .row__more { grid-column: 5 / span 8; justify-self: start; }
+  }
+  @media (max-width: 60rem) {
+    .branches__head, .panel__head { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-4); }
+    .branches__head .h2, .branches__lead, .panel__head .h3, .panel__intro, .panel__cityphone, .panel__head :global(.panel__city),
+    .tabs.is-tabs .panel__intro, .tabs.is-tabs .panel__cityphone { grid-column: 1; justify-self: start; }
+    .tabs__bar { margin-inline: calc(-1 * var(--space)); padding-inline: var(--space); }
+    .row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0; column-gap: var(--space-4); padding-block: var(--space-4); }
+    .row__name, .row__addr { grid-column: 1 / -1; }
+    .row__addr { margin-top: var(--space-1); }
+    .row__tel, .row__more { grid-column: 1 / -1; justify-self: start; }
+    .row__more:empty { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .panel.is-in { animation: none; }
+    .tabs__indicator, .tabs__tab, .row__map { transition: none; }
+  }
+</style>

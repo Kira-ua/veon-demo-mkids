@@ -1,0 +1,46 @@
+---
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+---
+<section id="contacts" class="section contacts" data-rec="R-102" aria-labelledby="contacts-title">
+  <div class="container contacts__grid">
+    <div class="contacts__head">
+      <h2 id="contacts-title" class="h2">Приходьте на екскурсію</h2>
+      <p class="lead muted">Зателефонуйте на головний номер мережі. Підкажемо найближчий садочок і запишемо на зручний день.</p>
+    </div>
+    <div class="contacts__main">
+      <a class="contacts__phone" href={`tel:${contacts.phone.tel}`}>{contacts.phone.text}</a>
+      <ul class="channels" role="list">
+        <li><a class="channel" href={contacts.telegram} rel="noopener"><Icon name="telegram" /><span>Telegram</span></a></li>
+        <li><a class="channel" href={contacts.viber}><Icon name="viber" /><span>Viber</span></a></li>
+      </ul>
+      <p class="contacts__msg muted">Telegram і Viber: {contacts.messenger.text}</p>
+      <a class="btn btn--text contacts__all" href="#branches">Усі адреси садочків</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contacts { padding-top: var(--space-7); }
+  .contacts__grid {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-6);
+    grid-template-areas:
+      "h h h h h . m m m m m m";
+  }
+  .contacts__head { grid-area: h; display: flex; flex-direction: column; gap: var(--space-4); }
+  .contacts__main { grid-area: m; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+  .contacts__phone {
+    font-family: var(--font-display); font-weight: 800; font-size: var(--text-number); line-height: 1; letter-spacing: var(--track-display);
+    white-space: nowrap; text-decoration: underline var(--line) var(--color-accent); text-underline-offset: 0.18em;
+    transition: text-decoration-color var(--dur-short) var(--ease-out);
+  }
+  .contacts__phone:hover { text-decoration-color: var(--color-text); }
+  .contacts__msg { margin: 0; font-size: var(--text-sm); }
+
+  @media (max-width: 75rem) {
+    .contacts__grid { grid-template-areas: "h h h h h h h h . . . ." "m m m m m m m m m m m m"; }
+  }
+  @media (max-width: 60rem) {
+    .contacts__grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "h" "m"; }
+  }
+</style>

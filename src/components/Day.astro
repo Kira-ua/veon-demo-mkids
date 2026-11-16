@@ -1,0 +1,93 @@
+---
+import { asset } from "../data/site";
+const program = [
+  "Англійська за Cambridge University Press",
+  "Психолог і логопед",
+  "Brain Design: математика й логіка",
+  "Read & Write",
+  "NanoNeuro: штучний інтелект і основи програмування",
+  "Money: фінансова грамотність",
+  "Soft і Hard Skills, Social skills",
+  "Елементи Монтессорі та STREAM",
+];
+---
+<section id="day" class="section day" aria-labelledby="day-title">
+  <div class="container day__grid">
+    <div class="day__main">
+      <h2 id="day-title" class="h2">Як минає день</h2>
+
+      <table class="schedule">
+        <caption class="visually-hidden">Формати дня в садочку, понеділок–пʼятниця</caption>
+        <thead>
+          <tr><th scope="col">Формат</th><th scope="col">Час, пн–пт</th><th scope="col">Харчування</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Повний день</th><td class="schedule__time">8:00–19:00</td><td>4 прийоми їжі</td></tr>
+          <tr><th scope="row">Пів дня</th><td class="schedule__time">8:00–13:00</td><td>3 прийоми їжі</td></tr>
+        </tbody>
+      </table>
+
+      <div class="day__groups">
+        <p class="day__big">10–15 дітей у групі</p>
+        <p class="day__compare">у державних садочках — 22–30</p>
+      </div>
+    </div>
+
+    <figure class="day__photo">
+      <img src={asset("img/day-carpet-744.webp")} srcset={`${asset("img/day-carpet-480.webp")} 480w` + ", " + `${asset("img/day-carpet-744.webp")} 744w`}
+        sizes="(min-width: 60rem) 40vw, 100vw" width="744" height="495" loading="lazy" decoding="async"
+        alt="Вихователька з дітьми на килимі в групі садочка mKids розглядають велику настільну гру" />
+      <figcaption>Заняття в групі садочка mKids.</figcaption>
+    </figure>
+
+    <div class="day__program">
+      <h3 class="day__progtitle">Що в програмі</h3>
+      <ul class="day__list" role="list">
+        {program.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .day__grid {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-7);
+    grid-template-areas:
+      "m m m m m m m . p p p p"
+      "g g g g g g g g g g g g";
+  }
+  .day__main { grid-area: m; display: flex; flex-direction: column; gap: var(--space-6); }
+  .schedule { width: 100%; border-collapse: collapse; font-size: var(--text-body); }
+  .schedule th, .schedule td { text-align: left; padding: var(--space-4) var(--space-4) var(--space-4) 0; border-bottom: 1px solid var(--color-rule); vertical-align: baseline; }
+  .schedule thead th { font-size: var(--text-sm); font-weight: 400; color: var(--color-muted); padding-top: 0; white-space: nowrap; }
+  .schedule tbody th { font-weight: 600; }
+  .schedule__time { font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .day__groups { display: flex; flex-direction: column; gap: var(--space-2); }
+  .day__big {
+    margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-section);
+    line-height: var(--lh-section); letter-spacing: var(--track-display);
+  }
+  .day__big::before { content: ""; display: block; width: 64px; height: var(--line); border-radius: var(--line); background: var(--color-accent); margin-bottom: var(--space-4); }
+  .day__compare { margin: 0; font-size: var(--text-lead); color: var(--color-muted); }
+  .day__photo { grid-area: p; margin: 0; min-width: 0; align-self: center; }
+  .day__photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 55% 50%; border-radius: var(--radius-photo); background: var(--color-paper-2); }
+  .day__photo figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--color-muted); }
+  .day__program { grid-area: g; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); border-top: 1px solid var(--color-rule); padding-top: var(--space-5); }
+  .day__progtitle { grid-column: 1 / span 3; margin: 0; font-size: var(--text-body); font-weight: 600; }
+  .day__list { grid-column: 4 / span 9; columns: 2; column-gap: var(--gap); margin: 0; padding: 0; list-style: none; }
+  .day__list li { break-inside: avoid; padding: var(--space-2) 0; color: var(--color-muted); }
+
+  @media (max-width: 60rem) {
+    .day__grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "m" "p" "g"; row-gap: var(--space-6); }
+    .day__photo img { aspect-ratio: 3 / 2; }
+    .day__program { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-3); }
+    .day__progtitle, .day__list { grid-column: 1; }
+  }
+  @media (max-width: 40rem) {
+    .day__list { columns: 1; }
+    .schedule thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .schedule tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: var(--space-4); padding-block: var(--space-3); border-bottom: 1px solid var(--color-rule); }
+    .schedule th, .schedule td { border: 0; padding: 0; }
+    .schedule td:last-child { grid-column: 1 / -1; color: var(--color-muted); font-size: var(--text-sm); }
+  }
+</style>

@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import { contacts } from "../data/site";
+const home = import.meta.env.BASE_URL;
+---
+<Base lang="uk" title="Сторінку не знайдено | mKids" description="Такої сторінки немає. Поверніться на головну mKids.">
+  <section class="container nf">
+    <h1 class="nf__title">Такої сторінки немає</h1>
+    <p class="nf__text">Можливо, адреса змінилася. Почніть з головної або зателефонуйте нам.</p>
+    <p class="nf__actions"><a class="btn btn--primary" href={home}>На головну</a> <a class="btn btn--quiet" href={`tel:${contacts.phone.tel}`}>{contacts.phone.text}</a></p>
+  </section>
+</Base>
+<style>
+  .nf { min-height: 70dvh; display: flex; flex-direction: column; justify-content: center; gap: var(--space-5); padding-block: var(--space-8); }
+  .nf__title { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-section); line-height: var(--lh-section); letter-spacing: var(--track-display); }
+  .nf__text { margin: 0; font-size: var(--text-lead); max-width: 40ch; }
+  .nf__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: 0; }
+</style>

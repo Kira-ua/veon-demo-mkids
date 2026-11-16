@@ -1,0 +1,117 @@
+---
+import Icon from "./Icon.astro";
+import BookButton from "./BookButton.astro";
+import { contacts, asset } from "../data/site";
+const links = [
+  { href: "#branches", label: "Садочки" },
+  { href: "#ages", label: "Вікові групи" },
+  { href: "#cost", label: "Вартість" },
+  { href: "#school", label: "Школа" },
+  { href: "#partners", label: "Партнерам" },
+];
+---
+<header class="header" data-header data-rec="R-108,R-102">
+  <div class="container header__bar">
+    <a class="header__logo" href="#top" aria-label="mKids, на початок сторінки">
+      <img src={asset("img/mkids-logo-96.webp")} srcset={`${asset("img/mkids-logo-96.webp")} 1x` + ", " + `${asset("img/mkids-logo-192.webp")} 2x`} width="48" height="48" alt="" />
+    </a>
+
+    <nav class="header__nav" aria-label="Розділи сторінки">
+      <ul role="list">
+        {links.map((l) => <li><a class="navlink" href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__phone" href={`tel:${contacts.phone.tel}`}>{contacts.phone.text}</a>
+      <BookButton label="Записатися" variant="quiet" align="end" class="header__book" />
+      <a class="header__icon" href={`tel:${contacts.phone.tel}`} aria-label={`Подзвонити ${contacts.phone.text}`}><Icon name="phone" size={22} /></a>
+      <details class="menu" data-menu>
+        <summary class="header__icon" aria-label="Меню"><Icon name="menu" size={24} class="menu__open" /><Icon name="close" size={24} class="menu__close" /></summary>
+        <div class="menu__panel">
+          <nav aria-label="Меню">
+            <ul role="list" class="menu__links">
+              {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+            </ul>
+          </nav>
+          <ul role="list" class="menu__channels">
+            <li><a class="channel" href={contacts.telegram} rel="noopener"><Icon name="telegram" /><span>Telegram</span></a></li>
+            <li><a class="channel" href={contacts.viber}><Icon name="viber" /><span>Viber</span></a></li>
+            <li><a class="channel channel--strong" href={`tel:${contacts.phone.tel}`}><Icon name="phone" /><span>Подзвонити</span></a></li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky; top: 0; z-index: var(--z-header);
+    background: var(--color-bg);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-short) var(--ease-out);
+  }
+  .header.is-scrolled { border-bottom-color: var(--color-rule); }
+  .header__bar { display: flex; align-items: center; gap: var(--space-5); height: var(--header-h); }
+  .header__logo { display: inline-flex; flex: none; border-radius: var(--radius-pill); }
+  .header__logo img { width: 48px; height: 48px; }
+  .header__nav { margin-inline-start: var(--space-4); }
+  .header__nav ul { display: flex; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+  .navlink {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-3);
+    border-radius: var(--radius); font-size: var(--text-sm); font-weight: 400; text-decoration: none; white-space: nowrap;
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+  .navlink:hover { background: var(--color-paper-2); }
+  .header__actions { display: flex; align-items: center; gap: var(--space-4); margin-inline-start: auto; }
+  .header__phone {
+    font-weight: 600; font-size: var(--text-body); white-space: nowrap;
+    display: inline-flex; align-items: center; min-height: 44px;
+    text-decoration: underline 2px transparent; text-underline-offset: 6px;
+    transition: text-decoration-color var(--dur-short) var(--ease-out);
+  }
+  .header__phone:hover { text-decoration-color: var(--color-accent); }
+  .header__icon {
+    display: none; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-pill);
+    list-style: none; cursor: pointer; color: var(--color-text);
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+  .header__icon::-webkit-details-marker { display: none; }
+  .header__icon:hover { background: var(--color-paper-2); }
+  .menu { display: none; }
+  .menu :global(.menu__close) { display: none; }
+  .menu[open] :global(.menu__open) { display: none; }
+  .menu[open] :global(.menu__close) { display: block; }
+  .menu__panel {
+    position: fixed; inset: var(--header-h) 0 auto 0; z-index: var(--z-pop);
+    max-height: calc(100dvh - var(--header-h)); overflow-y: auto;
+    padding: var(--space-5) var(--space) var(--space-6);
+    background: var(--color-bg); border-top: 1px solid var(--color-rule);
+    box-shadow: 0 24px 32px -24px color-mix(in oklab, var(--color-text) 35%, transparent);
+  }
+  .menu[open] .menu__panel { animation: menu-in var(--dur-short) var(--ease-out); }
+  .menu__links { margin: 0 0 var(--space-5); padding: 0; list-style: none; }
+  .menu__links a {
+    display: flex; align-items: center; min-height: 52px; border-bottom: 1px solid var(--color-rule);
+    font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); letter-spacing: -0.02em; text-decoration: none; white-space: nowrap;
+  }
+  .menu__channels { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .menu__channels .channel { width: 100%; justify-content: flex-start; }
+  @keyframes menu-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 75rem) {
+    .header__phone { display: none; }
+  }
+  @media (max-width: 60rem) {
+    .header__nav, .header__actions > :global(.header__book) { display: none; }
+    .header__icon { display: inline-grid; }
+    .menu { display: block; }
+    .header__actions { gap: var(--space-1); }
+    .header__logo img { width: 44px; height: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu[open] .menu__panel { animation: none; }
+    .header, .navlink, .header__phone, .header__icon { transition: none; }
+  }
+</style>

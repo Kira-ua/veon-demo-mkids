@@ -1,0 +1,60 @@
+---
+import FutureLink from "./FutureLink.astro";
+const history = [
+  { year: "2002", text: "Освітні курси, потім мовні заняття для дітей від 3 років" },
+  { year: "2011", text: "Перший приватний садочок, на Березняках" },
+  { year: "2021", text: "«Мандаринка» стала mKids" },
+  { year: "2023", text: "Перші садочки у Львові та в Польщі" },
+];
+---
+<section id="about" class="section about" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <p class="about__year" aria-hidden="true">2002</p>
+    <div class="about__text">
+      <h2 id="about-title" class="h2">Від курсів до мережі</h2>
+      <p class="lead">Понад 20 тисяч випускників за історію мережі. Раніше мережа називалася «Мандаринка».</p>
+      <p class="about__slogan">Рекомендують батьки, а обирають діти.</p>
+    </div>
+    <ol class="history" role="list">
+      {history.map((h) => (
+        <li class="history__item">
+          <span class="history__dot" aria-hidden="true"></span>
+          <p class="history__year">{h.year}</p>
+          <p class="history__text">{h.text}</p>
+        </li>
+      ))}
+    </ol>
+    <div class="about__more"><FutureLink note="Розділ у розробці">Про нас</FutureLink></div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-7);
+    grid-template-areas:
+      "y y y y y y y t t t t t"
+      "h h h h h h h h h h h h"
+      "m m m m m m m m m m m m";
+    align-items: end;
+  }
+  .about__year {
+    grid-area: y; margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-year);
+    line-height: 0.85; letter-spacing: -0.05em; color: var(--color-accent-text); font-variant-numeric: tabular-nums;
+  }
+  .about__text { grid-area: t; display: flex; flex-direction: column; gap: var(--space-4); }
+  .about__slogan { margin: 0; font-weight: 600; }
+  .history { grid-area: h; position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); margin: 0; padding: 0; list-style: none; }
+  .history::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--stop) / 2 - 1px); height: 2px; background: var(--color-accent); }
+  .history__item { position: relative; display: flex; flex-direction: column; gap: var(--space-2); padding-right: var(--space-4); }
+  .history__dot { width: var(--stop); height: var(--stop); border-radius: 50%; background: var(--color-bg); border: var(--line) solid var(--color-accent); margin-bottom: var(--space-3); }
+  .history__year { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); letter-spacing: -0.02em; }
+  .history__text { margin: 0; color: var(--color-muted); max-width: 28ch; }
+  .about__more { grid-area: m; }
+
+  @media (max-width: 60rem) {
+    .about__grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "y" "t" "h" "m"; row-gap: var(--space-6); }
+    .history { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); padding-left: calc(var(--stop) + var(--space-4)); }
+    .history::before { left: calc(var(--stop) / 2 - 1px); right: auto; top: 0; bottom: 0; width: 2px; height: auto; }
+    .history__dot { position: absolute; left: calc(-1 * (var(--stop) + var(--space-4))); top: var(--space-1); margin: 0; }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Branches from "../components/Branches.astro";
+import Ages from "../components/Ages.astro";
+import Day from "../components/Day.astro";
+import FirstSteps from "../components/FirstSteps.astro";
+import Cost from "../components/Cost.astro";
+import School from "../components/School.astro";
+import About from "../components/About.astro";
+import Partners from "../components/Partners.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { contacts, socials, asset } from "../data/site";
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "mKids",
+  alternateName: ["m.Kids", "Мандаринка"],
+  logo: asset("img/mkids-logo-192.webp"),
+  foundingDate: "2002",
+  telephone: contacts.phone.tel,
+  sameAs: socials.map((s) => s.url),
+  contactPoint: { "@type": "ContactPoint", telephone: contacts.phone.tel, contactType: "customer service", availableLanguage: ["uk"] },
+};
+---
+<Base lang="uk" title="Приватні дитячі садочки та школа m.Kids у Києві | mKids" description="Мережа приватних садочків, Preschool і початкової школи m.Kids: Київ, Львів, Польща. Малі групи, англійська Cambridge, безпека. Запис на екскурсію.">
+  <script slot="head" type="application/ld+json" data-rec="R-204" is:inline set:html={JSON.stringify(ld)} />
+  <Header slot="header" />
+  <Hero />
+  <Branches />
+  <Ages />
+  <Day />
+  <FirstSteps />
+  <Cost />
+  <School />
+  <About />
+  <Partners />
+  <Contacts />
+  <Footer slot="footer" />
+  <MobileBar slot="footer" />
+</Base>
+<script src="../scripts/main.ts"></script>

@@ -1,0 +1,80 @@
+---
+import FutureLink from "./FutureLink.astro";
+const stations = [
+  { age: "1,5–3", name: "Ясла", line: "Наймолодші приходять у садочок з півтора року." },
+  { age: "3–6", name: "Садочок", line: "Повний день або пів дня, англійська за Cambridge." },
+  { age: "Preschool", name: "Підготовка до школи", line: "Підготовка до першого класу: у Києві, області та у Львові.", future: true },
+  { age: "1–4 клас", name: "m.Primary", line: "Початкова школа: до 20 учнів у класі." },
+];
+---
+<section id="ages" class="section ages" aria-labelledby="ages-title">
+  <div class="container">
+    <div class="ages__head">
+      <h2 id="ages-title" class="h2">Від ясел до школи</h2>
+      <p class="lead muted">Дитина може пройти весь шлях в одній мережі: від першої групи до четвертого класу.</p>
+    </div>
+    <div class="stations" data-fill>
+      <span class="stations__track" aria-hidden="true"></span>
+      <span class="stations__fill" aria-hidden="true"></span>
+      <ol class="stations__list" role="list">
+      {stations.map((s) => (
+        <li class="station">
+          <span class="station__dot" aria-hidden="true"></span>
+          <h3 class="station__age">{s.age}</h3>
+          <p class="station__name">{s.name}</p>
+          <p class="station__line">{s.line}</p>
+          {s.future && <FutureLink note="Розділ у розробці" class="station__more">Про Preschool</FutureLink>}
+        </li>
+      ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ages { padding-bottom: var(--space-7); }
+  .ages__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: end; margin-bottom: var(--space-7); }
+  .ages__head .h2 { grid-column: 1 / span 6; }
+  .ages__head .lead { grid-column: 8 / span 5; }
+
+  .stations { position: relative; }
+  .stations__list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); margin: 0; padding: 0; list-style: none; }
+  .stations__track, .stations__fill {
+    position: absolute; left: 0; right: 0; top: calc(var(--stop) / 2 - var(--line) / 2); height: var(--line); border-radius: var(--line);
+  }
+  .stations__track { background: var(--color-rule); }
+  .stations__fill { background: var(--color-accent); transform-origin: left center; }
+  /* Effect 3: the line fills once when the block enters the screen (visible without JS). */
+  :global(.js) .stations:not(.is-in) .stations__fill { transform: scaleX(0); }
+  :global(.js) .stations .stations__fill { transition: transform var(--dur-fill) var(--ease-out); }
+  .station { position: relative; display: flex; flex-direction: column; gap: var(--space-2); padding-right: var(--space-4); }
+  .station__dot { width: var(--stop); height: var(--stop); border-radius: 50%; background: var(--color-bg); border: var(--line) solid var(--color-accent); margin-bottom: var(--space-4); }
+  .station__age {
+    margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--text-section); line-height: 1;
+    letter-spacing: var(--track-display); white-space: nowrap;
+  }
+  .station__name { margin: 0; font-weight: 600; font-size: var(--text-lead); }
+  .station__line { margin: 0; color: var(--color-muted); max-width: 28ch; }
+  .station :global(.station__more) { align-self: flex-start; font-size: var(--text-sm); }
+
+  @media (max-width: 75rem) {
+    .station__age { font-size: var(--text-title); }
+  }
+  @media (max-width: 60rem) {
+    .ages__head { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-4); margin-bottom: var(--space-6); }
+    .ages__head .h2, .ages__head .lead { grid-column: 1; }
+    /* vertical line on the phone */
+    .stations { padding-left: calc(var(--stop) + var(--space-4)); }
+    .stations__list { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-6); }
+    .stations__track, .stations__fill { left: calc(var(--stop) / 2 - var(--line) / 2); right: auto; top: 0; bottom: 0; width: var(--line); height: auto; }
+    .stations__fill { transform-origin: center top; }
+    :global(.js) .stations:not(.is-in) .stations__fill { transform: scaleY(0); }
+    :global(.js) .stations .stations__fill { transition-duration: 600ms; }
+    .station__dot { position: absolute; left: calc(-1 * (var(--stop) + var(--space-4))); top: var(--space-1); margin: 0; }
+    .station__age { font-size: var(--text-title); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .stations:not(.is-in) .stations__fill { transform: none; }
+    :global(.js) .stations .stations__fill { transition: none; }
+  }
+</style>

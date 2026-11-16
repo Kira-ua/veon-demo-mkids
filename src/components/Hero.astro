@@ -1,0 +1,135 @@
+---
+import BookButton from "./BookButton.astro";
+import { cities, asset } from "../data/site";
+---
+<section id="hero" class="hero" data-rec="R-101,R-102,R-110,R-201,R-202,R-203" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <h1 id="hero-title" class="hero__title">Приватні садочки й школи mKids поруч із домом</h1>
+
+    <div class="hero__text">
+      <p class="hero__lede">Ясла з 1,5 року, садочки й початкова школа в Україні та Польщі.</p>
+      <div class="hero__actions">
+        <BookButton rec="R-102" class="hero__book" />
+        <a class="btn btn--text" href="#branches">Знайти садочок поруч</a>
+      </div>
+    </div>
+
+    <nav class="route" aria-label="Міста mKids" data-route>
+      <div class="route__track">
+      <span class="route__line" aria-hidden="true"></span>
+      <ol class="route__stops" role="list">
+        {cities.map((c, i) => (
+          <li class="route__stop" style={`--i:${i}`}>
+            <a href={`#city-${c.id}`} data-city={c.id}><span class="route__dot" aria-hidden="true"></span><span class="route__name">{c.stop}</span></a>
+          </li>
+        ))}
+      </ol>
+      </div>
+    </nav>
+
+    <figure class="hero__photo">
+      <img
+        src={asset("img/hero-group-1280.webp")}
+        srcset={`${asset("img/hero-group-640.webp")} 640w` + ", " + `${asset("img/hero-group-960.webp")} 960w` + ", " + `${asset("img/hero-group-1280.webp")} 1280w` + ", " + `${asset("img/hero-group-1600.webp")} 1600w`}
+        sizes="(min-width: 60rem) 62vw, 100vw"
+        width="1600" height="1067"
+        alt="Дві дівчинки в групі садочка mKids викладають візерунок з кольорових фігурок"
+        fetchpriority="high" decoding="async"
+      />
+      <figcaption>mKids: рекомендують батьки, а обирають діти</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(32px, 1rem + 3vw, 64px) var(--space-6); }
+  .hero__grid {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap);
+    grid-template-areas:
+      "t t t t t t t t t t t t"
+      "r r r r r r r r r r r r"
+      "x x x x p p p p p p p p";
+    row-gap: clamp(24px, 1rem + 1.5vw, 48px);
+  }
+  .hero__title {
+    grid-area: t; margin: 0;
+    font-family: var(--font-display); font-weight: 800; font-size: var(--text-display);
+    line-height: var(--lh-display); letter-spacing: var(--track-display);
+  }
+  .hero__text { grid-area: x; display: flex; flex-direction: column; gap: var(--space-6); align-self: start; padding-top: var(--space-2); }
+  .hero__lede { margin: 0; font-size: var(--text-lead); line-height: 1.5; max-width: 30ch; }
+  .hero__actions { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+  @media (min-width: 60rem) {
+    .hero__actions :global(.hero__book .book__menu) { top: auto; bottom: calc(100% + var(--space-2)); }
+  }
+  .hero__photo { grid-area: p; margin: 0; min-width: 0; }
+  .hero__photo img {
+    width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 40%; border-radius: var(--radius-photo);
+    background: var(--color-paper-2);
+  }
+  .hero__photo figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--color-muted); }
+
+  /* The mKids line: six real cities, each stop opens that city's addresses. */
+  .route { grid-area: r; min-width: 0; }
+  .route__track { position: relative; }
+  .route__line {
+    position: absolute; left: 0; right: 0; top: calc(var(--stop) / 2 - var(--line) / 2);
+    height: var(--line); border-radius: var(--line); background: var(--color-accent); transform-origin: left center;
+  }
+  .route__stops { position: relative; display: flex; justify-content: space-between; margin: 0; padding: 0; list-style: none; }
+  .route__stop a {
+    display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3);
+    min-height: 44px; padding-bottom: var(--space-1); text-decoration: none; border-radius: var(--radius);
+  }
+  .route__stop:last-child a { align-items: flex-end; }
+  .route__dot {
+    width: var(--stop); height: var(--stop); border-radius: 50%;
+    background: var(--color-bg); border: var(--line) solid var(--color-accent);
+    transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+  }
+  .route__name {
+    font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); line-height: var(--lh-title);
+    letter-spacing: -0.02em; white-space: nowrap;
+    text-decoration: underline 2px transparent; text-underline-offset: 6px;
+    transition: text-decoration-color var(--dur-short) var(--ease-out);
+  }
+  .route__stop a:hover .route__dot { background: var(--color-accent); transform: scale(1.15); }
+  .route__stop a:hover .route__name { text-decoration-color: var(--color-accent); }
+  .route__stop a:active .route__dot { transform: scale(0.95); }
+
+  /* Effect 1: the line is laid once on load; text and photo are visible at once. */
+  :global(.js) .route__line { animation: route-draw var(--dur-line) var(--ease-out) both; }
+  :global(.js) .route__stop { animation: stop-in var(--dur-short) var(--ease-out) both; animation-delay: calc(240ms + var(--i) * 40ms); }
+  @keyframes route-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes stop-in { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (min-width: 100rem) {
+    .hero__photo img { aspect-ratio: 2 / 1; }
+  }
+  @media (max-width: 60rem) {
+    .hero__photo img { aspect-ratio: 3 / 2; }
+    .hero { padding-block: var(--space-5) var(--space-7); }
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "t" "x" "r" "p";
+      row-gap: var(--space-5);
+    }
+    .hero__text { gap: var(--space-5); padding-top: 0; }
+    .hero__actions { flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); }
+    /* the line becomes a horizontal row that scrolls */
+    .route { margin-inline: calc(-1 * var(--space)); padding-inline: var(--space); overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding-inline: var(--space); }
+    .route::-webkit-scrollbar { display: none; }
+    .route__track { width: max-content; padding-inline-end: var(--space); }
+    .route__line { right: var(--space); }
+    .route__stops { gap: var(--space-6); justify-content: flex-start; }
+    .route__stop { scroll-snap-align: start; }
+    .route__stop:last-child a { align-items: flex-start; }
+    .route__name { font-size: 1.25rem; }
+    :global(.js) .route__line { animation: stop-in var(--dur-short) var(--ease-out) both; }
+    :global(.js) .route__stop { animation-delay: 0ms; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .route__line, :global(.js) .route__stop { animation: none; }
+    .route__dot, .route__name { transition: none; }
+  }
+</style>

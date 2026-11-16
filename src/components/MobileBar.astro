@@ -1,0 +1,32 @@
+---
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+---
+<div class="mbar" data-mobile-bar data-rec="R-106" role="region" aria-label="Швидкий зв'язок">
+  <a class="mbar__btn" href={`tel:${contacts.phone.tel}`}><Icon name="phone" /><span>Подзвонити</span></a>
+  <a class="mbar__btn mbar__btn--tg" href={contacts.telegram} rel="noopener"><Icon name="telegram" /><span>Telegram</span></a>
+</div>
+
+<style>
+  .mbar { display: none; }
+  @media (max-width: 60rem) {
+    .mbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-bar);
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+      padding: var(--space-2) var(--space) calc(var(--space-2) + env(safe-area-inset-bottom));
+      background: var(--color-bg); border-top: 1px solid var(--color-rule);
+      transition: transform var(--dur-short) var(--ease-out), opacity var(--dur-short) var(--ease-out);
+    }
+    .mbar.is-hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
+    .mbar__btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--control-h);
+      border: 1.5px solid var(--color-text); border-radius: var(--radius-pill); font-weight: 600; text-decoration: none; white-space: nowrap;
+      transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .mbar__btn:active { transform: translateY(1px); }
+    .mbar__btn--tg { background: var(--color-text); color: var(--color-bg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mbar, .mbar__btn { transition: none; }
+  }
+</style>

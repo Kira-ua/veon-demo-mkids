@@ -1,0 +1,74 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { contacts, socials } from "../data/site";
+const anchors = [
+  { href: "#branches", label: "Садочки" },
+  { href: "#ages", label: "Вікові групи" },
+  { href: "#cost", label: "Вартість" },
+  { href: "#school", label: "Школа" },
+  { href: "#partners", label: "Партнерам" },
+];
+const future = ["Про нас", "Вакансії", "Блог", "Публічна інформація", "Політика конфіденційності"];
+---
+<footer class="footer" data-rec="R-109,S-R012">
+  <div class="container footer__grid">
+    <div class="footer__col">
+      <p class="footer__title">Зв'язатися</p>
+      <a class="footer__phone" href={`tel:${contacts.phone.tel}`}>{contacts.phone.text}</a>
+      <ul class="footer__links" role="list">
+        <li><a class="footer__link" href={contacts.telegram} rel="noopener"><Icon name="telegram" size={18} />Telegram</a></li>
+        <li><a class="footer__link" href={contacts.viber}><Icon name="viber" size={18} />Viber</a></li>
+      </ul>
+    </div>
+    <nav class="footer__col footer__nav" aria-label="Розділи сторінки та сайту">
+      <p class="footer__title">На сторінці</p>
+      <ul class="footer__links" role="list">
+        {anchors.map((a) => <li><a class="footer__link" href={a.href}>{a.label}</a></li>)}
+      </ul>
+      <ul class="footer__links" role="list">
+        {future.map((f) => <li><FutureLink note="Розділ у розробці">{f}</FutureLink></li>)}
+      </ul>
+    </nav>
+    <div class="footer__col">
+      <p class="footer__title">Соцмережі</p>
+      <ul class="footer__links" role="list">
+        {socials.map((s) => <li><a class="footer__link" href={s.url} rel="noopener"><Icon name={s.id} size={18} />{s.name}</a></li>)}
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__legal">
+    <p>© 2002–2026 mKids</p>
+    <a class="footer__link" href="#top">На початок</a>
+  </div>
+</footer>
+
+<style>
+  .footer { position: relative; padding-block: var(--space-7) var(--space-6); }
+  .footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: var(--line); background: var(--color-accent); }
+  .footer__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-6); }
+  .footer__col:nth-child(1) { grid-column: 1 / span 4; }
+  .footer__nav { grid-column: 5 / span 5; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--gap); align-content: start; }
+  .footer__nav .footer__title { grid-column: 1 / -1; }
+  .footer__col:nth-child(3) { grid-column: 10 / span 3; }
+  .footer__title { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--color-muted); }
+  .footer__phone { display: inline-flex; min-height: 44px; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: var(--text-title); letter-spacing: -0.02em; text-decoration: none; white-space: nowrap; }
+  .footer__phone:hover { color: var(--color-accent-text); }
+  .footer__links { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .footer__link {
+    display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; white-space: nowrap; text-decoration: underline 1px transparent; text-underline-offset: 5px;
+    transition: text-decoration-color var(--dur-short) var(--ease-out);
+  }
+  .footer__link:hover { text-decoration-color: currentColor; }
+  .footer__legal { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-rule); font-size: var(--text-sm); color: var(--color-muted); }
+  .footer__legal p { margin: 0; }
+
+  @media (max-width: 60rem) {
+    .footer__grid { grid-template-columns: minmax(0, 1fr); }
+    .footer__col:nth-child(1), .footer__nav, .footer__col:nth-child(3) { grid-column: 1; }
+  }
+  @media (max-width: 40rem) {
+    .footer__nav { grid-template-columns: minmax(0, 1fr); }
+    .footer__nav .footer__links + .footer__links { margin-top: var(--space-3); }
+  }
+</style>
